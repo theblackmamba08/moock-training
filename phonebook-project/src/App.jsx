@@ -7,11 +7,11 @@ import SuccessNotification from './components/SuccessNotification'
 import ErrorNotification from './components/ErrorNotification'
 
 const App = () => {
-	const [allPersons, setAllPersons] = useState([])
+	const [allPersons, setAllPersons] = useState(null)
 	const [newName, setNewName] = useState('')
 	const [newNumber, setNewNumber] = useState('')
 	const [newSearch, setNewSearch] = useState('')
-	const [errorMessage, setErrorMessage] = useState('some error happened...')
+	const [errorMessage, setErrorMessage] = useState('')
 	const [successMessage, setSuccessMessage] = useState('');
 
 
@@ -22,6 +22,10 @@ const App = () => {
 				setAllPersons(initialPersons)
 			})
 	}, [])
+
+	if (!allPersons){
+		return null
+	}
 
 	const handleSearchChange = (event) => {
 		setNewSearch(event.target.value)
