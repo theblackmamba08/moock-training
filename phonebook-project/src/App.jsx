@@ -3,12 +3,17 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import noteService from './services/persons'
+import SuccessNotification from './components/SuccessNotification'
+import ErrorNotification from './components/ErrorNotification'
 
 const App = () => {
 	const [allPersons, setAllPersons] = useState([])
 	const [newName, setNewName] = useState('')
 	const [newNumber, setNewNumber] = useState('')
 	const [newSearch, setNewSearch] = useState('')
+	const [errorMessage, setErrorMessage] = useState('some error happened...')
+	const [successMessage, setSuccessMessage] = useState('');
+
 
 	useEffect(() => {
 		noteService
@@ -72,6 +77,10 @@ const App = () => {
 			.createPerson(personObject)
 			.then(returnedPerson => {
 				setAllPersons(allPersons.concat(returnedPerson))
+				setSuccessMessage('Enregistrement réussi !');
+				setTimeout(() => {
+					setSuccessMessage(null);
+				}, 5000);
 				setNewName('')
 				setNewNumber('')
 			})
@@ -90,7 +99,10 @@ const App = () => {
 					setAllPersons(allPersons.filter(person => person.id !== id))
 				})
 				.catch(error => {
-					alert(`La suppression a échoué. L'entrée a peut-être déjà été supprimée du serveur.`)
+					setErrorMessage(`La suppression a échoué. L'entrée a peut-être déjà été supprimée du serveur.`)
+					setTimeout(() => {
+						setErrorMessage(null)
+					}, 5000)
 					setAllPersons(allPersons.filter(person => person.id !== id))
 				})
 		}
@@ -99,6 +111,8 @@ const App = () => {
 	return (
 		<div>
 			<h2>Phonebook</h2>
+			{errorMessage && <ErrorNotification message={errorMessage} />}
+			{successMessage && <SuccessNotification message={successMessage} />}
 			<Filter newSearch={newSearch} handleSearchChange={handleSearchChange} />
 			<h2>Add a new</h2>
 			<PersonForm
