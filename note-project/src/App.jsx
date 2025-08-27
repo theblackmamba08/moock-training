@@ -64,7 +64,10 @@ const App = () => {
 					setNotes(notes.filter(n => n.id !== id));
 				})
 				.catch(error => {
-					alert(`the note was already deleted from server`);
+					setErrorMessage(`the note was already deleted from server`);
+					setTimeout(() => {
+						setErrorMessage(null)
+					}, 5000);
 					setNotes(notes.filter(n => n.id !== id));
 				});
 			return;
